@@ -4,6 +4,13 @@
         <title>Fourier Transform Visualizer - Swamp Hacks</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
     </head>
+
+    <style>
+        div{
+            width: 1000 px;
+            padding: 20 px;
+        }
+    </style>
     <body>
         <div>
             <h1>Record Some Audio</h1>
@@ -11,7 +18,7 @@
         </div>
         <div>
             <h1>Fourier Transform Visualizer</h1>
-            <canvas id="visualizer"></canvas>
+            <canvas id="visualizer" width="800" height="400" style="border:1px solid #444444;"></canvas>
         </div>
         <div>
             <h1>Fourier Algorithm Explanation</h1>
@@ -22,4 +29,11 @@
             <p>Need to list some applications and briefly explain</p>
         </div>
     </body>
+    <script src="graph_renderer.js"></script>
+    <script>
+        const renderer = new GraphRenderer(document, "visualizer");
+        renderer.renderAxes();
+        //renderer.renderCube(50);//tests to see if Coordinates look good
+        renderer.renderWaves();
+    </script>
 </html>
