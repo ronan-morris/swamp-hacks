@@ -1,6 +1,5 @@
 //import wave_renderer from "./wave_renderer.js";
 class GraphRenderer{
-
     /**
      * Initializes a Graph Renderer object
      * @param    {document}  document       HTML document on which to render the graph
@@ -8,41 +7,65 @@ class GraphRenderer{
     */
     constructor(document, canvasID){
         this.ctx = document.getElementById(canvasID).getContext("2d");
+        this.XROTATION = 0.2;
+        this.YROTATION = -0.2;
+        this.ZROTATION = 0.6;
     }
 
     /**
         * draws a line between two points on the object's linked canvas
         * @param    {Array}   xyzA       Point in 3d space to start at: [x,y,z]; domains [0,600], [-120,120], and [-80,80] for default axes
         * @param    {Array}   xyzB       Point in 3d space to end at
-        * @param    {float}   rotation   How far the time axis is rotated 'out of the screen' in radians. Default is 0.5
         * @param    {color}   color      What color to draw the line
     */
-    drawLine(xyzA, xyzB, rotation, color){
-        let x,y;
+    drawLine(xyzA, xyzB, color){
+        let x,y,z;
         this.ctx.beginPath();
         this.ctx.strokeStyle = color;
-        [x,y] = this.threeDimsCoordsToTwo(xyzA, rotation);
-        this.ctx.moveTo(x,y);
-        [x,y] = this.threeDimsCoordsToTwo(xyzB, rotation);
-        this.ctx.lineTo(x,y);
+        [x,y,z] = this.rotatexyz(xyzA, this.XROTATION, this.YROTATION, this.ZROTATION);
+        if(x < -150){
+            x = 0;
+        }
+        if(z < -150){
+            z = 0;
+        }
+        this.ctx.moveTo(x+150,z+150);
+        [x,y,z] = this.rotatexyz(xyzB, this.XROTATION, this.YROTATION, this.ZROTATION);
+        if(x < -150){
+            x = 0;
+        }
+        if(z < -150){
+            z = 0;
+        }
+        this.ctx.lineTo(x+150,z+150);
         this.ctx.stroke();
     }
-
+    drawUnrotatedLine(xyzA, xyzB, color){
+        let x,y,z;
+        this.ctx.beginPath();
+        this.ctx.strokeStyle = color;
+        [x,y,z] = xyzA;
+        this.ctx.moveTo(x+150,z+150);
+        [x,y,z] = xyzB;
+        this.ctx.lineTo(x+150,z+150);
+        this.ctx.stroke();
+    }
     /**
         * rotates a given point and returns its new coordinates
-        * @param    {Array}   x     initial x coordinate
-        * @param    {float}   y     initial y coordinate
-        * @param    {float}   z     initial z coordinate
-        * @param    {float}   a     angle of rotation about z axis
+        * @param    {Array}   xyz     initial xyz coordinates
+        * @param    {float}   a     angle of rotation about x axis
         * @param    {float}   b     angle of rotation about y axis
-        * @param    {float}   c     angle of rotation about x axis (will be 0 for our purposes)
+        * @param    {float}   c     angle of rotation about z axis (will be 0 for our purposes)
     */
-    rotatexyz(x,y,z,a,b,c){ //a, b, c being rotations about z, y, and x axes
-        let newX = Math.cos(a)*Math.cos(b)*x + (Math.cos(a)*Math.sin(b)*Math.sin(c)-Math.sin(a)*Math.cos(c))*y
+    rotatexyz(xyz,a,b,c){ //a, b, c being rotations about x, y, and z axes
+        let x = xyz[0];
+        let y = xyz[1];
+        let z = xyz[2];
+        let newX = Math.cos(b)*Math.cos(c)*x + (Math.sin(a)*Math.sin(b)*Math.cos(c)-Math.cos(a)*Math.sin(c))*y
             +(Math.cos(a)*Math.sin(b)*Math.cos(c)+Math.sin(a)*Math.sin(c))*z;
-        let newY = Math.sin(a)*Math.cos(b)*x + (Math.sin(a)*Math.sin(b)*Math.sin(c)+Math.cos(a)*Math.cos(c))*y
-            +(Math.sin(a)*Math.sin(b)*Math.cos(c)-Math.cos(a)*Math.sin(c))*z;
-        let newZ = -Math.sin(b)*x + Math.cos(b)*Math.sin(c)*y + Math.cos(b)*Math.cos(c)*z;
+        let newY = Math.sin(c)*Math.cos(b)*x + (Math.sin(a)*Math.sin(b)*Math.sin(c)+Math.cos(a)*Math.cos(c))*y
+            +(Math.cos(a)*Math.sin(b)*Math.sin(c)-Math.sin(a)*Math.cos(c))*z;
+        let newZ = -Math.sin(b)*x + Math.cos(b)*Math.sin(a)*y + Math.cos(b)*Math.cos(a)*z;
         return [newX, newY, newZ];
     }
 
@@ -52,14 +75,14 @@ class GraphRenderer{
         * @param    {float}   maxAmplitude   Height of the y-axis
         * @param    {float}   rotation       How far the time axis is rotated 'out of the screen' in radians. Default is 0.5
     */
-    renderAxes(timeScale = 3, maxAmplitude = 120, rotation = 0.5){
+    renderAxes(timeScale = 3, maxAmplitude = 120){
 
         //x-axis
-        this.drawLine([0,0,0], [200 * timeScale,0,0], rotation, 'blue')
+        this.drawLine([-100,0,0], [200 * timeScale,0,0], 'blue')
         //y-axis
-        this.drawLine([0,-maxAmplitude,0], [0,maxAmplitude,0], rotation, 'green')
+        this.drawUnrotatedLine([0,0,-maxAmplitude], [0,0,maxAmplitude], 'green')
         //z-axis
-        this.drawLine([0,0,-120], [0,0, 120], rotation, 'red')
+        this.drawLine([0,-500,0], [0,100, 0], 'red')
 
     }
 
@@ -78,8 +101,37 @@ class GraphRenderer{
     }
 
     renderWaves(waveArr, zCoordsArr){
-
+        for(let i = 0; i < waveArr[0].length; i++)
+        {
+            
+        }
+        for(let i = 1; i < waveArr.length; i++)
+        {
+            
+        }
     }
-    
+    /**
+        * draws a line between two points on the object's linked canvas
+        * @param    {float}   amplitude     amplitude of wave
+        * @param    {float}   frequency     frequency of wave
+        * @param    {string}  color         color of wave
+        * @param    {float}   backshift     how far wave is positioned on y-axis
+    */
+    renderSinWave(amplitude, frequency, color, backshift)
+    {
+        this.ctx.beginPath();
+        this.ctx.moveTo(150,150)
+        for(let i = 0; i < 600; i+= 0.1)
+        {
+            let x = i;
+            let y = -1*backshift;
+            let z = amplitude*Math.sin(i/5*frequency);
+            let newCoords = this.rotatexyz([x,y,z], this.XROTATION, this.YROTATION, this.ZROTATION);
+            this.ctx.lineTo(newCoords[0]+150, newCoords[2]+150);
+        }
+        this.ctx.strokeStyle = color
+        this.ctx.stroke();
+        
+    }
 
 }
