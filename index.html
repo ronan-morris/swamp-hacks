@@ -14,7 +14,8 @@
     <body>
         <div>
             <h1>Record Some Audio</h1>
-            <button type="button">Click To Begin</button> 
+            <button onclick="ourRecorder.startRecording()">Click To Begin</button> 
+            <button onclick="ourRecorder.stopRecording()">Click To End</button> 
         </div>
         <div>
             <h1>Fourier Transform Visualizer</h1>
@@ -42,5 +43,10 @@ http://www.ijirset.com/upload/2018/november/46_Applications%20of%20Fourier%20tra
         renderer.renderAxes();
         //renderer.renderCube(50);//tests to see if Coordinates look good
         renderer.renderWaves();
+    </script>
+    <script src="audio_grabber.js"></script>
+    <script>
+        ourRecorder = new AudioRecorder()
+
     </script>
 </html>
