@@ -29,19 +29,21 @@ class GraphRenderer{
     }
 
     /**
-        * draws a line between two points on the object's linked canvas
-        * @param    {Array}   xyz                   Point in 3d space to project to 2d
-        * @param    {float}   perspectiveRotation   How far the time axis is rotated 'out of the screen' in radians. Default is 0.5
-        * @param    {float}   canvasHeight          Height of canvas (to center graph vertically)
-        * @param    {float}   xOffset               2d x position of (0,0,0)
-        * @param    {float}   zScale                Factor by which to scale z distances
+        * rotates a given point and returns its new coordinates
+        * @param    {Array}   x     initial x coordinate
+        * @param    {float}   y     initial y coordinate
+        * @param    {float}   z     initial z coordinate
+        * @param    {float}   a     angle of rotation about z axis
+        * @param    {float}   b     angle of rotation about y axis
+        * @param    {float}   c     angle of rotation about x axis (will be 0 for our purposes)
     */
-    threeDimsCoordsToTwo(xyz, perspectiveRotation = 0.5, canvasHeight = 400, xOffset = 100, zScale = 1.5){
-        let [x, y, z] = xyz;
-        zScale *= perspectiveRotation
-        let x_2d = x  - Math.sin(perspectiveRotation) * z * zScale + xOffset;
-        let y_2d = -y + Math.cos(perspectiveRotation) * z * zScale + canvasHeight / 2;
-        return [x_2d,y_2d];
+    rotatexyz(x,y,z,a,b,c){ //a, b, c being rotations about z, y, and x axes
+        let newX = Math.cos(a)*Math.cos(b)*x + (Math.cos(a)*Math.sin(b)*Math.sin(c)-Math.sin(a)*Math.cos(c))*y
+            +(Math.cos(a)*Math.sin(b)*Math.cos(c)+Math.sin(a)*Math.sin(c))*z;
+        let newY = Math.sin(a)*Math.cos(b)*x + (Math.sin(a)*Math.sin(b)*Math.sin(c)+Math.cos(a)*Math.cos(c))*y
+            +(Math.sin(a)*Math.sin(b)*Math.cos(c)-Math.cos(a)*Math.sin(c))*z;
+        let newZ = -Math.sin(b)*x + Math.cos(b)*Math.sin(c)*y + Math.cos(b)*Math.cos(c)*z;
+        return [newX, newY, newZ];
     }
 
     /**
