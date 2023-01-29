@@ -3,35 +3,147 @@
     <head>
         <title>Fourier Transform Visualizer - Swamp Hacks</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <style>
+            * {
+              box-sizing: border-box;
+            }
+            
+            body {
+              font-family: 'Times New Roman', sans-serif;
+            }
+            
+            header {
+              background-color: black;
+              padding: 30px;
+              text-align: center;
+              font-size: 25px;
+              color: white;
+            }
+
+            header2{
+                text-align: center;
+                font-size: 13px;
+                color: white;
+            }
+            
+            nav {
+              float: left;
+              width: 100%;
+              height: device-height;
+              background: lightgrey;
+              text-align: center;
+              color: black;
+              padding: 20px;
+            }
+            
+            nav ul {
+              list-style-type: none;
+              color: black;
+              padding: 0;
+            }
+            
+            article1 {
+              float: left;
+              padding: 20px;
+              width: 100%;
+              text-align: center;
+              background-color: grey;
+              color: white;
+              height: device-height;
+            }
+
+            article2 {
+              float: left;
+              padding: 20px;
+              width: 100%;
+              background-color: rgb(211, 211, 211);
+              text-align: center;
+              color: black;
+              height: device-height;
+            }
+            
+            section::after {
+              content: "";
+              display: table;
+              clear: both;
+            }
+            
+            footer {
+              background-color: grey;
+              padding: 10px;
+              text-align: center;
+              color: white;
+              font-size: 8px;
+              height: 100px;
+            }
+            
+            @media (max-width: 600px) {
+              nav, article {
+                width: 100%;
+                height: auto;
+              }
+            }
+        </style>
     </head>
 
-    <style>
-        div{
-            width: 1000 px;
-            padding: 20 px;
-        }
-    </style>
     <body>
         <div>
-            <h1>Record Some Audio</h1>
-            <button onclick="ourRecorder.startRecording()">Click To Begin</button> 
-            <button onclick="ourRecorder.stopRecording()">Click To End</button> 
-            <button onclick="ourRenderer.renderPulseCodeModulationWave(ourRecorder.getPcmData())">Click To Visualize</button> 
+            <header>
+                <h1>Fourier Transform Visualizer - Swamp Hacks</h1>
+                <header2>
+                    <h2>Project By: Vedant Karalkar, Ronan Morris, Bill Zhao, and Pranav Guduru</h2>
+                </header2>
+            </header>
         </div>
-        <div>
-            <h1>Fourier Transform Visualizer</h1>
-            <canvas id="visualizer" width="800" height="400" style="border:1px solid #444444;"></canvas>
+            <section>
+                <nav>
+                <ul>
+                    <style>
+                        li{
+                            display: inline;
+                            padding: 20px;
+                        }
+                    </style>
+                    <li><a href="#record">Record Some Audio</a></li>
+                    <li><a href="#visualize">Fourier Transform Visualizer</a></li>
+                    <li><a href="#explain">Fourier Algorithm Explanation</a></li>
+                    <li><a href="#application">Fourier Algorithm Applications</a></li>
+                </ul>
+                </nav>
+                <article1>
+                    <div>
+                        <h1 id = "record">Record Some Audio</h1>
+                        <h1>Record Some Audio</h1>
+                        <button onclick="ourRecorder.startRecording()">Click To Begin</button> 
+                        <button onclick="ourRecorder.stopRecording()">Click To End</button> 
+                        <button onclick="ourRenderer.renderPulseCodeModulationWave(ourRecorder.getPcmData())">Click To Visualize</button> 
+                    </div>
+                </article1>
+                <article2>
+                    <div>
+                        <h1 id = "visulaize">Fourier Transform Visualizer</h1>
+                        <canvas id="visualizer" width="800" height="400" style="border:1px solid #444444;"></canvas>
+                    </div>
+                </article2>
+                <article1>
+                    <div>
+                        <h1 id = "explain">Fourier Algorithm Explanation</h1>
+                        <p>A mathematical tool used to separate a wave into its individual frequency components is the Fourier algorithm, sometimes referred to as the Fourier Transform. By disassembling complicated signals and images into simpler sinusoidal components, which can then be adjusted or examined independently, it enables the investigation of signals and images.</p>
+                        <p> The Fast Fourier Transform (FFT) is an algorithm which is used quite often to find the transform as it reduces the number of calculations needed to obtain it. This reduces the run time and is also easier for the programmer to program the code required for obtaining the transform.</p>
+                    </div>
+                </article1>
+                <article2>
+                    <div>
+                        <h1 id = "application">Fourier Algorithm Applications</h1>
+                        <p>The Fourier Transform has many valuable applications especially in the fields of science and technology. According to Rajvardhan Patil, it is useful in Application to IBVP, Circuit Analysis, Signal Analysis, Cell phones,  Image Processing, and  Signal Processing & LTI system (Patil). The Fourier Transform is a technique used in signal processing that can be applied to examine audio signals like speech or music and extract data about the frequencies contained in the signal. This can be useful in other ways too with image compression where you can remove redundant data without losing the crucial data. This can further be applied with object recognition in images which is something we have seen being implemented by Apple recently into their phones. </p>
+                    </div>
+                </article2>
+            </section>
         </div>
-        <div>
-            <h1>Fourier Algorithm Explanation</h1>
-            <p>A mathematical tool used to separate a wave into its individual frequency components is the Fourier algorithm, sometimes referred to as the Fourier Transform. By disassembling complicated signals and images into simpler sinusoidal components, which can then be adjusted or examined independently, it enables the investigation of signals and images.</p>
-            <p> The Fast Fourier Transform (FFT) is an algorithm which is used quite often to find the transform as it reduces the number of calculations needed to obtain it. This reduces the run time and is also easier for the programmer to program the code required for obtaining the transform.</p>
-        </div>
-        <div>
-            <h1>Fourier Algorithm Applications</h1>
-            <p>The Fourier Transform has many valuable applications especially in the fields of science and technology. According to Rajvardhan Patil, it is useful in Application to IBVP, Circuit Analysis, Signal Analysis, Cell phones,  Image Processing, and  Signal Processing & LTI system (Patil). The Fourier Transform is a technique used in signal processing that can be applied to examine audio signals like speech or music and extract data about the frequencies contained in the signal. This can be useful in other ways too with image compression where you can remove redundant data without losing the crucial data. This can further be applied with object recognition in images which is something we have seen being implemented by Apple recently into their phones. </p>
-            <p> http://www.ijirset.com/upload/2018/november/46_Applications%20of%20Fourier%20transform%20in%20Engineering%20Field%20_1_.pdf </p>
-        </div>
+        <footer>
+            <h1>Works Cited:</h1>
+            <h1>http://www.ijirset.com/upload/2018/november/46_Applications%20of%20Fourier%20transform%20in%20Engineering%20Field%20_1_.pdf</h1>
+        </footer>
     </body>
     <script src="graph_renderer.js"></script>
     <script>
