@@ -1,4 +1,3 @@
-//import wave_renderer from "./wave_renderer.js";
 class GraphRenderer{
     /**
      * Initializes a Graph Renderer object
@@ -138,6 +137,24 @@ class GraphRenderer{
             let x = i;
             let y = -1*backshift;
             let z = amplitude*Math.sin(i/5*frequency);
+            let newCoords = this.rotatexyz([x,y,z], this.XROTATION, this.YROTATION, this.ZROTATION);
+            this.ctx.lineTo(newCoords[0]+150, newCoords[2]+150);
+        }
+        this.ctx.strokeStyle = color
+        this.ctx.stroke();
+    }
+
+    renderPulseCodeModulationWave(pcmObj, color = 'black', backshift = 0){
+        this.ctx.beginPath();
+        this.ctx.moveTo(150,150);
+        let pointArr = pcmObj.pointDefinitions;
+        //this.zScaleFactor = Math.floor(120 / Math.max(...pointArr)))
+        //console.log(this.zScaleFactor)
+        for(let i in pointArr)
+        {
+            let x = i;
+            let y = -1*backshift;
+            let z = pointArr[i] * 1000;
             let newCoords = this.rotatexyz([x,y,z], this.XROTATION, this.YROTATION, this.ZROTATION);
             this.ctx.lineTo(newCoords[0]+150, newCoords[2]+150);
         }

@@ -1,5 +1,5 @@
 class AudioRecorder{
-
+    
 
     constructor(){
         this.chunks = []
@@ -36,16 +36,15 @@ class AudioRecorder{
      */
     stopRecording(){
         let blobType = this.currentRecorder.mimeType;
-        console.log("blobtype: ")
-        console.log(blobType)
         this.currentRecorder.addEventListener("stop", (event) => {
-            this.recordedBlob = new Blob(this.chunks, {type: 'audio/webm;codecs=opus'}); 
-            console.log(this.recordedBlob)
+            this.recordedBlob = new Blob(this.chunks, {type: 'audio/webm;codecs=opus'});
             this.audioURL = window.URL.createObjectURL(this.recordedBlob)
 
             const audio = document.createElement("audio");
             audio.controls = true;
             audio.src = this.audioURL;
+
+            this.blobToPCM();
         });
         this.currentRecorder.stop();
         this.currentStream.getTracks()
@@ -57,22 +56,33 @@ class AudioRecorder{
      */
     blobToPCM(){
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        let source = audioCtx.createBufferSource();
+        this.source = audioCtx.createBufferSource();
         let fileReader = new FileReader();
 
         fileReader.addEventListener("loadend", () => {
             audioCtx.decodeAudioData(fileReader.result).then((decodedData) => {
-                console.log(decodedData);
-                source.buffer = decodedData;
-                source.connect(audioCtx.destination);
-                //source.loop = true;
-                source.start(0);
+                this.source.buffer = decodedData;
+                let rate = decodedData.sampleRate;
+                let points = decodedData.getChannelData(0).slice(-513, -1);
+                this.pcmData = {sampleRate:rate, pointDefinitions:points}
+                /*let pcmPromise = new Promise((resolve, reject)=>{
+                    resolve({sampleRate:rate, pointDefinitions:points})
+                });*/
+                //return pcmPromise
+                
             });
         });
         fileReader.readAsArrayBuffer(this.recordedBlob)
     }
 
-    
+    getPcmData(){
+        return this.pcmData;
+    }
+
+    playCollectedAudio(){
+        this.source.connect(audioCtx.destination);
+        this.source.start(0);
+    }
 
 
     laterStuff(){
