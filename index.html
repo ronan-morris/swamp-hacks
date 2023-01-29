@@ -104,16 +104,15 @@
                             padding: 20px;
                         }
                     </style>
-                    <li><a href="#record">Record Some Audio</a></li>
-                    <li><a href="#visualize">Fourier Transform Visualizer</a></li>
-                    <li><a href="#explain">Fourier Algorithm Explanation</a></li>
-                    <li><a href="#application">Fourier Algorithm Applications</a></li>
+                    <li><button><a href="#record">Record Some Audio</button></a></li>
+                    <li><button><a href="#visualize">Fourier Transform Visualizer</button></a></li>
+                    <li><button><a href="#explain">Fourier Algorithm Explanation</button></a></li>
+                    <li><button><a href="#application">Fourier Algorithm Applications</button></a></li>
                 </ul>
                 </nav>
                 <article1>
                     <div>
                         <h1 id = "record">Record Some Audio</h1>
-                        <h1>Record Some Audio</h1>
                         <button onclick="ourRecorder.startRecording()">Click To Begin</button> 
                         <button onclick="ourRecorder.stopRecording()">Click To End</button> 
                         <button onclick="ourRenderer.renderPulseCodeModulationWave(ourRecorder.getPcmData())">Click To Visualize</button> 
