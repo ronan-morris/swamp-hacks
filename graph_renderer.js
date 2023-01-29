@@ -108,13 +108,26 @@ class GraphRenderer{
     }
     /**
         * draws a line between two points on the object's linked canvas
-        * @param    {Array[Array]}   sineWavesArr    mx2 array of amplitudes and frequencies, amplitude listed first, color listed last
+        * @param    {Array}   sineWavesArr        array of amplitudes, frequencies, and phase shifts, amplitude listed first, frequency listed last
         * @param    {Array}  yCoordsArr           m+1 length array of the backshifts of each of the waves
     */
     renderWaves(sineWavesArr, yCoordsArr){
         for(let i = 0; i < sineWavesArr.length; i++)
         {
-            this.renderSinWave(sineWavesArr[i][0], sineWavesArr[i][1], sinWavesArr[i][2], yCoordsArr[i])
+            let waveColor = undefined;
+            if(i % 4 == 0){
+                waveColor = "red"
+            }
+            else if(i % 4 == 1){
+                waveColor = "orange"
+            }
+            else if(i % 4 == 2){
+                waveColor = "purple"
+            }
+            else {
+                waveColor = "green"
+            }
+            this.renderSinWave(sineWavesArr[i].amplitude, sineWavesArr[i].frequency, sineWavesArr[i].phaseShift, waveColor, yCoordsArr[i])
         }
     }
     /**
@@ -124,17 +137,26 @@ class GraphRenderer{
         * @param    {string}  color         color of wave
         * @param    {float}   backshift     how far wave is positioned on y-axis
     */
-    renderSinWave(amplitude, frequency, color, backshift)
+    renderSinWave(amplitude, frequency, phaseShift, color, backshift)
     {
         this.ctx.beginPath();
-        this.ctx.moveTo(150,150);
+        let scaleFactor = undefined;
         for(let i = 0; i < 600; i+= 0.1)
         {
             let x = i;
             let y = -1*backshift;
-            let z = amplitude*Math.sin(i/5*frequency);
+            if(i == 0)
+            {
+                scaleFactor = 40 / amplitude;
+            }
+            let z = amplitude*Math.sin((i-phaseShift)*frequency/2000*Math.PI)*scaleFactor/Math.sqrt(frequency);
             let newCoords = this.rotatexyz([x,y,z], this.XROTATION, this.YROTATION, this.ZROTATION);
-            this.ctx.lineTo(newCoords[0]+150, newCoords[2]+150);
+            if(i != 0){
+                this.ctx.lineTo(newCoords[0]+150, newCoords[2]+150);
+            }
+            else{
+                this.ctx.moveTo(newCoords[0]+150, newCoords[2]+150);
+            }
         }
         this.ctx.strokeStyle = color
         this.ctx.stroke();
@@ -158,17 +180,15 @@ class GraphRenderer{
         this.ctx.stroke();
     }
     
-    renderEverything(pcmObj, color = 'black', backshift = 0) {
+    renderEverything(pcmObj, componentWaveArr, color = 'black', backshift = 0) {
         pcmOb = pcmObj;
         this.renderPulseCodeModulationWave(pcmObj, color, backshift);
+        getCosines(componentWaveArr);
         window.requestAnimationFrame(animateFFT());
     }
 
 
 }
-
-
-
 
 animationStarted = false;
 let then = undefined;
@@ -176,7 +196,7 @@ let thenSec = undefined;
 var FFTWaves = undefined;
 
 function getCosines(componentWaveArr){
-    console.log(componentWaveArr);
+    //console.log(componentWaveArr);
     /**
      * is of the form
      * [
@@ -186,7 +206,7 @@ function getCosines(componentWaveArr){
      * {amplitude:float, phaseShift:float, frequency:int}
      * ]
      */
-    FFTWaves = componentWaveArr
+    FFTWaves = componentWaveArr;
 }
 
 function animateFFT() //draws each frame in the animation, is recursively called
@@ -243,10 +263,6 @@ function animateFFT() //draws each frame in the animation, is recursively called
     else{
         obj.renderAxes();
         obj.renderPulseCodeModulationWave(pcmOb);
-        obj.renderSinWave(12, 2, "red", 50);
-        obj.renderSinWave(12, 2, "red", 100);
-        obj.renderSinWave(12, 2, "red", 150);
-        obj.renderSinWave(12, 2, "red", 200);
-        obj.renderSinWave(12, 2, "red", 250);
+        obj.renderWaves(FFTWaves, [50, 100, 150, 200, 250]);
     }
 }
