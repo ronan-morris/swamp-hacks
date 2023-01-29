@@ -1,3 +1,4 @@
+let pcmOb = undefined;
 class GraphRenderer{
     /**
      * Initializes a Graph Renderer object
@@ -9,6 +10,8 @@ class GraphRenderer{
         this.XROTATION = 0.2;
         this.YROTATION = -0.2;
         this.ZROTATION = 0.6;
+        const now = new Date();
+        this.time = now.getMilliseconds();
     }
 
     /**
@@ -39,6 +42,12 @@ class GraphRenderer{
         this.ctx.lineTo(x+150,z+150);
         this.ctx.stroke();
     }
+    /**
+        * draws a line between two points on the object's linked canvas but doesn't rotate it.
+        * @param    {Array}   xyzA       Point in 3d space to start at: [x,y,z]; domains [0,600], [-120,120], and [-80,80] for default axes
+        * @param    {Array}   xyzB       Point in 3d space to end at
+        * @param    {color}   color      What color to draw the line
+    */
     drawUnrotatedLine(xyzA, xyzB, color){
         let x,y,z;
         this.ctx.beginPath();
@@ -99,26 +108,13 @@ class GraphRenderer{
     }
     /**
         * draws a line between two points on the object's linked canvas
-        * @param    {Array[Array]}   graphArr     nx2 array of x-values and z-values, x-value listed first
         * @param    {Array[Array]}   sineWavesArr    mx2 array of amplitudes and frequencies, amplitude listed first, color listed last
         * @param    {Array}  yCoordsArr           m+1 length array of the backshifts of each of the waves
     */
-    renderWaves(graphArr, sineWavesArr, yCoordsArr){
-        this.ctx.beginPath();
-        this.ctx.moveTo(150,150);
-        for(let i = 0; i < graphArr.length; i++)
-        {
-            let x = waveArr[i][0];
-            let y = yCoordsArr[0];
-            let z = waveArr[i][1];
-            let newCoords = this.rotatexyz([x,y,z], this.XROTATION, this.YROTATION, this.ZROTATION);
-            this.ctx.lineTo(newCoords[0]+150, newCoords[2]+150);
-        }
-        this.ctx.strokeStyle = "black";
-        this.ctx.stroke();
+    renderWaves(sineWavesArr, yCoordsArr){
         for(let i = 0; i < sineWavesArr.length; i++)
         {
-            this.renderSinWave(sineWavesArr[0], sineWavesArr[1], sinWavesArr[2], yCoordsArr[1+i])
+            this.renderSinWave(sineWavesArr[i][0], sineWavesArr[i][1], sinWavesArr[i][2], yCoordsArr[i])
         }
     }
     /**
@@ -154,12 +150,85 @@ class GraphRenderer{
         {
             let x = i;
             let y = -1*backshift;
-            let z = pointArr[i] * this.zScaleFactor ;
+            let z = pointArr[i] * this.zScaleFactor;
             let newCoords = this.rotatexyz([x,y,z], this.XROTATION, this.YROTATION, this.ZROTATION);
             this.ctx.lineTo(newCoords[0]+150, newCoords[2]+150);
         }
         this.ctx.strokeStyle = color
         this.ctx.stroke();
     }
+    
+    renderEverything(pcmObj, color = 'black', backshift = 0) {
+        pcmOb = pcmObj;
+        this.renderPulseCodeModulationWave(pcmObj, color, backshift);
+        window.requestAnimationFrame(animateFFT());
+    }
 
+}
+
+
+animationStarted = false;
+let then = undefined;
+let thenSec = undefined;
+let FFTWaves = undefined;
+function animateFFT() //draws each frame in the animation, is recursively called
+{
+    if(!animationStarted)
+    {
+        const startTime = new Date();
+        then = startTime.getMilliseconds();
+        thenSec = startTime.getSeconds();
+        animationStarted = true;
+    }
+    obj = new GraphRenderer(document, "visualizer");
+    const now = new Date();
+    obj.ctx.clearRect(0,0,800,400);
+    let milliTimeDiff = now.getMilliseconds() - then;
+    let timeDiff = now.getSeconds() - thenSec;
+    obj.ctx.save();
+    if(timeDiff < 2){
+        obj.renderAxes();
+        obj.renderPulseCodeModulationWave(pcmOb);
+        obj.renderWaves(FFTWaves, [0, 0, 0, 0, 125/1000*milliTimeDiff + 125*timeDiff]);
+        obj.ctx.restore();
+        window.requestAnimationFrame(animateFFT);
+    }
+    else if(timeDiff < 4)
+    {
+        obj.renderAxes();
+        obj.renderPulseCodeModulationWave(pcmOb);
+        obj.renderWaves(FFTWaves, [0, 0, 0, 100/1000*milliTimeDiff+100*(timeDiff % 2), 250]);
+        obj.ctx.restore();
+        window.requestAnimationFrame(animateFFT);
+    }
+    else if(timeDiff < 6){
+        obj.renderAxes();
+        obj.renderPulseCodeModulationWave(pcmOb);
+        obj.renderWaves(FFTWaves, [0, 0, 75/1000*milliTimeDiff+75*(timeDiff % 2), 200, 250]);
+        obj.ctx.restore();
+        window.requestAnimationFrame(animateFFT);
+    }
+    else if(timeDiff < 8){
+        obj.renderAxes();
+        obj.renderPulseCodeModulationWave(pcmOb);
+        obj.renderWaves(FFTWaves, [0, 50/1000*milliTimeDiff + 50*(timeDiff % 2), 150, 200, 250]);
+        obj.ctx.restore();
+        window.requestAnimationFrame(animateFFT);
+    }
+    else if(timeDiff < 10){
+        obj.renderAxes();
+        obj.renderPulseCodeModulationWave(pcmOb);
+        obj.renderWaves(FFTWaves, [25/1000*milliTimeDiff + 25*(timeDiff % 2), 100, 150, 200, 250]);
+        obj.ctx.restore();
+        window.requestAnimationFrame(animateFFT);
+    }
+    else{
+        obj.renderAxes();
+        obj.renderPulseCodeModulationWave(pcmOb);
+        obj.renderSinWave(12, 2, "red", 50);
+        obj.renderSinWave(12, 2, "red", 100);
+        obj.renderSinWave(12, 2, "red", 150);
+        obj.renderSinWave(12, 2, "red", 200);
+        obj.renderSinWave(12, 2, "red", 250);
+    }
 }
