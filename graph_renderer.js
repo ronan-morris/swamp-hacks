@@ -148,13 +148,13 @@ class GraphRenderer{
         this.ctx.beginPath();
         this.ctx.moveTo(150,150);
         let pointArr = pcmObj.pointDefinitions;
-        //this.zScaleFactor = Math.floor(120 / Math.max(...pointArr)))
-        //console.log(this.zScaleFactor)
+        this.zScaleFactor = Math.floor(120 / Math.max(...pointArr))
+        console.log(this.zScaleFactor)
         for(let i in pointArr)
         {
             let x = i;
             let y = -1*backshift;
-            let z = pointArr[i] * 1000;
+            let z = pointArr[i] * this.zScaleFactor ;
             let newCoords = this.rotatexyz([x,y,z], this.XROTATION, this.YROTATION, this.ZROTATION);
             this.ctx.lineTo(newCoords[0]+150, newCoords[2]+150);
         }
