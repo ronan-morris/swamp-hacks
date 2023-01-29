@@ -1,78 +1,82 @@
 class AudioRecorder{
 
-    /**
-     * Initializes a Graph Renderer object
-     * @param    {document}  document       HTML document on which to render the graph
-     * @param    {string}    canvasID       HTML canvas on which to render the graph
-    */
+
     constructor(){
-        self.chunks = []
+        this.chunks = []
     }
 
 
     startRecording(){
-        if (!navigator.mediaDevices.getUserMedia){
-            throw new Error("Media not supported or allowed")
-        }
-        else{//from https://developer.mozilla.org/en-US/docs/Web/API/WebRTC_API/Build_a_phone_with_peerjs/Connect_peers/Get_microphone_permission
-            navigator.mediaDevices
+        //from https://developer.mozilla.org/en-US/docs/Web/API/WebRTC_API/Build_a_phone_with_peerjs/Connect_peers/Get_microphone_permission
+        this.chunks = []
+
+
+        navigator.mediaDevices
             .getUserMedia({ video: false, audio: true })
-            .then((stream) => {
-                window.localStream = stream; 
-                self.currentStream = stream;
-                self.currentRecorder = new MediaRecorder(stream);
-                self.currentRecorder.start();
-                self.currentRecorder.addEventListener("dataavailable", (e) => {self.chunks.push(e.data)});
+            .then(stream => {
+                /*
+                window.localStream = stream;
+                window.localAudio.srcObject = stream;
+                window.localAudio.autoplay = true;
+                */
+                this.currentStream = stream;
+                this.currentRecorder = new MediaRecorder(stream);
+                this.currentRecorder.ondataavailable = (e) => {//CURRENTLY EMPTY
+                    this.chunks.push(e.data);
+                };
+                this.currentRecorder.start();
             })
             .catch((err) => {
                 console.error(`you got an error: ${err}`);
             });
-        }
     }
 
     /**
      * 
      */
     stopRecording(){
-        let blobType = self.currentRecorder.mimeType;
+        let blobType = this.currentRecorder.mimeType;
         console.log("blobtype: ")
         console.log(blobType)
-        self.currentRecorder.addEventListener("stop", (event) => {
+        this.currentRecorder.addEventListener("stop", (event) => {
+            this.recordedBlob = new Blob(this.chunks, {type: 'audio/webm;codecs=opus'}); 
+            console.log(this.recordedBlob)
+            this.audioURL = window.URL.createObjectURL(this.recordedBlob)
 
-            self.recordedBlob = new Blob(self.chunks, {type: blobType});
-            self.audioURL = window.URL.createObjectURL(self.recordedBlob)
-            console.log("blob URL:")
-            console.log(self.audioURL)
             const audio = document.createElement("audio");
             audio.controls = true;
-            audio.src = self.audioURL;
-            console.log(audio);
+            audio.src = this.audioURL;
         });
-        self.currentRecorder.stop();
-        self.currentStream.getTracks()
+        this.currentRecorder.stop();
+        this.currentStream.getTracks()
         .forEach(track => {track.stop();});
     }
 
     /**
      * @return {PointDefinedWave} Representation of the audio we recorded
      */
-    blobToPDW(){
+    blobToPCM(){
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        let source = audioCtx.createBufferSource();
+        let fileReader = new FileReader();
 
-    }
-
-    /** 
-     * from
-     * https://developer.mozilla.org/en-US/docs/Web/API/WebRTC_API/Build_a_phone_with_peerjs/Connect_peers/Get_microphone_permission
-     */ 
-    getLocalStream() {
-        navigator.mediaDevices
-        .getUserMedia({ video: false, audio: true })
-        .then((stream) => {
-            window.localStream = stream; // A
-        })
-        .catch((err) => {
-            console.error(`you got an error: ${err}`);
+        fileReader.addEventListener("loadend", () => {
+            audioCtx.decodeAudioData(fileReader.result).then((decodedData) => {
+                console.log(decodedData);
+                source.buffer = decodedData;
+                source.connect(audioCtx.destination);
+                //source.loop = true;
+                source.start(0);
+            });
         });
+        fileReader.readAsArrayBuffer(this.recordedBlob)
     }
+
+    
+
+
+    laterStuff(){
+    }
+    
 }
   

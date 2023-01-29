@@ -16,6 +16,7 @@
             <h1>Record Some Audio</h1>
             <button onclick="ourRecorder.startRecording()">Click To Begin</button> 
             <button onclick="ourRecorder.stopRecording()">Click To End</button> 
+            <button onclick="ourRecorder.blobToPCM()">Click After End</button> 
         </div>
         <div>
             <h1>Fourier Transform Visualizer</h1>
@@ -32,12 +33,13 @@
     </body>
     <script src="graph_renderer.js"></script>
     <script>
-        const renderer = new GraphRenderer(document, "visualizer");
-        renderer.renderAxes();
+        //const renderer = new GraphRenderer(document, "visualizer");
+        //renderer.renderAxes();
         //renderer.renderCube(50);//tests to see if Coordinates look good
-        renderer.renderWaves();
+        //renderer.renderWaves();
     </script>
     <script src="audio_grabber.js"></script>
+    <script src="async_version.js"></script>
     <script>
         ourRecorder = new AudioRecorder()
 
