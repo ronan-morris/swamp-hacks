@@ -61,6 +61,16 @@
               color: black;
               height: device-height;
             }
+
+            article3 {
+              float: left;
+              padding: 20px;
+              width: 100%;
+              text-align: center;
+              background-color: grey;
+              color: white;
+              height: device-height;
+            }
             
             section::after {
               content: "";
@@ -69,10 +79,10 @@
             }
             
             footer {
-              background-color: grey;
+              background-color: rgb(211, 211, 211);
               padding: 10px;
               text-align: center;
-              color: white;
+              color: black;
               font-size: 8px;
               height: 100px;
             }
@@ -104,8 +114,9 @@
                             padding: 20px;
                         }
                     </style>
-                    <li><button><a href="#record">Record Some Audio</button></a></li>
+                    <li><button><a href="#record">Record Audio</button></a></li>
                     <li><button><a href="#visualize">Fourier Transform Visualizer</button></a></li>
+                    <li><button><a href="#outline">Project Outline</button></a></li>
                     <li><button><a href="#explain">Fourier Algorithm Explanation</button></a></li>
                     <li><button><a href="#application">Fourier Algorithm Applications</button></a></li>
                 </ul>
@@ -113,9 +124,9 @@
                 <article1>
                     <div>
                         <h1 id = "record">Record Some Audio</h1>
-                        <button onclick="ourRecorder.startRecording()">Click To Begin</button> 
-                        <button onclick="ourRecorder.stopRecording()">Click To End</button> 
-                        <button onclick="ourRenderer.renderPulseCodeModulationWave(ourRecorder.getPcmData())">Click To Visualize PCM wave</button> 
+                        <button onclick="ourRecorder.startRecording()">Begin Audio Recording</button> 
+                        <button onclick="ourRecorder.stopRecording()">End Recording</button> 
+                        <button onclick="ourRenderer.renderPulseCodeModulationWave(ourRecorder.getPcmData())">Visualize PCM wave</button> 
                         <button onclick="
                             ourRenderer.renderEverything(ourRecorder.getPcmData(), ourAudioConverter.pcmToFourComponents(ourRecorder.getPcmData().pointDefinitions))
                         ">Click To Visualize component waves</button> 
@@ -128,19 +139,30 @@
                         <canvas id="visualizer" width="800" height="400" style="border:1px solid #444444;"></canvas>
                     </div>
                 </article2>
-                <article1>
+                <article3>
+                    <div>
+                        <h1 id = "outline">Project Outline</h1>
+                        <p>1)Record and save audio in the browser</p>
+                        <p>2)Convert that audio from opus to AudioBuffer to PCM (essentially an array of samples from the audio wave)</p>
+                        <p>3)We then truncate this PCM object, keeping only the last 512 points (at a sample rate of 44100 Hz, this is about a hundredth of a second)</p>
+                        <p>4)We plot these points from a 3d perspective, then perform a Discrete Fourier Transform on them using a public library. </p>
+                        <p>5)From the results of the transform, we determine the amplitudes and phase shifts of 512 sin waves.</p>
+                        <p>6)The 4 of these with the largest amplitudes we animate and plot on our 3d axes.</p>
+                    </div>
+                </article3>
+                <article2>
                     <div>
                         <h1 id = "explain">Fourier Algorithm Explanation</h1>
                         <p>A mathematical tool used to separate a wave into its individual frequency components is the Fourier algorithm, sometimes referred to as the Fourier Transform. By disassembling complicated signals and images into simpler sinusoidal components, which can then be adjusted or examined independently, it enables the investigation of signals and images.</p>
                         <p> The Fast Fourier Transform (FFT) is an algorithm which is used quite often to find the transform as it reduces the number of calculations needed to obtain it. This reduces the run time and is also easier for the programmer to program the code required for obtaining the transform.</p>
                     </div>
-                </article1>
-                <article2>
+                </article2>
+                <article1>
                     <div>
                         <h1 id = "application">Fourier Algorithm Applications</h1>
                         <p>The Fourier Transform has many valuable applications especially in the fields of science and technology. According to Rajvardhan Patil, it is useful in Application to IBVP, Circuit Analysis, Signal Analysis, Cell phones,  Image Processing, and  Signal Processing & LTI system (Patil). The Fourier Transform is a technique used in signal processing that can be applied to examine audio signals like speech or music and extract data about the frequencies contained in the signal. This can be useful in other ways too with image compression where you can remove redundant data without losing the crucial data. This can further be applied with object recognition in images which is something we have seen being implemented by Apple recently into their phones. </p>
                     </div>
-                </article2>
+                </article1>
             </section>
         </div>
         <footer>
