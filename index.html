@@ -113,10 +113,17 @@
                 <article1>
                     <div>
                         <h1 id = "record">Record Some Audio</h1>
-                        <h1>Record Some Audio</h1>
                         <button onclick="ourRecorder.startRecording()">Click To Begin</button> 
                         <button onclick="ourRecorder.stopRecording()">Click To End</button> 
-                        <button onclick="ourRenderer.renderPulseCodeModulationWave(ourRecorder.getPcmData())">Click To Visualize</button> 
+                        <button onclick="ourRenderer.renderPulseCodeModulationWave(ourRecorder.getPcmData())">Click To Visualize PCM wave</button> 
+                        <button onclick="
+                        const input = new Array(4096);
+                            input.fill(0);
+                            let complexArr;
+                            complexArr = fourier.dft(ourRecorder.getPcmData().pointDefinitions, input);
+                            console.log(complexArr);
+                        ">Click To Visualize component waves</button> 
+                        
                     </div>
                 </article1>
                 <article2>
@@ -153,5 +160,22 @@
     <script src="audio_grabber.js"></script>
     <script>
         ourRecorder = new AudioRecorder()
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/fourier/fourier.min.js"></script>
+    <script>
+        var stdlib = {
+            Math: Math,
+            Float32Array: Float32Array,
+            Float64Array: Float64Array
+        };
+
+        // Create heap for the fft data and twiddle factors
+        var heap = fourier.custom.alloc(512, 3);
+
+        // Create instance of FFT runner
+        var fft_runner = fourier.custom.fft_f32_512_asm(stdlib, null, heap);
+
+        fft_runner.init();
+        
     </script>
 </html>
