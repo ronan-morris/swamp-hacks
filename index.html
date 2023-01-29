@@ -116,6 +116,7 @@
                     </style>
                     <li><button><a href="#record">Record Audio</button></a></li>
                     <li><button><a href="#visualize">Fourier Transform Visualizer</button></a></li>
+                    <li><button><a href="#outline">Project Outline</button></a></li>
                     <li><button><a href="#explain">Fourier Algorithm Explanation</button></a></li>
                     <li><button><a href="#application">Fourier Algorithm Applications</button></a></li>
                 </ul>
@@ -141,12 +142,12 @@
                 <article3>
                     <div>
                         <h1 id = "outline">Project Outline</h1>
-                        <p>Record and save audio in the browser</p>
-                        <p>Convert that audio from opus to AudioBuffer to PCM (essentially an array of samples from the audio wave)</p>
-                        <p>We then truncate this PCM object, keeping only the last 512 points (at a sample rate of 44100 Hz, this is about a hundredth of a second)</p>
-                        <p>We plot these points from a 3d perspective, then perform a Discrete Fourier Transform on them using a public library. </p>
-                        <p>From the results of the transform, we determine the amplitudes and phase shifts of 512 sin waves.</p>
-                        <p>The 4 of these with the largest amplitudes we animate and plot on our 3d axes.</p>
+                        <p>1)Record and save audio in the browser</p>
+                        <p>2)Convert that audio from opus to AudioBuffer to PCM (essentially an array of samples from the audio wave)</p>
+                        <p>3)We then truncate this PCM object, keeping only the last 512 points (at a sample rate of 44100 Hz, this is about a hundredth of a second)</p>
+                        <p>4)We plot these points from a 3d perspective, then perform a Discrete Fourier Transform on them using a public library. </p>
+                        <p>5)From the results of the transform, we determine the amplitudes and phase shifts of 512 sin waves.</p>
+                        <p>6)The 4 of these with the largest amplitudes we animate and plot on our 3d axes.</p>
                     </div>
                 </article3>
                 <article2>
