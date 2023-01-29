@@ -116,7 +116,9 @@
                         <button onclick="ourRecorder.startRecording()">Click To Begin</button> 
                         <button onclick="ourRecorder.stopRecording()">Click To End</button> 
                         <button onclick="ourRenderer.renderPulseCodeModulationWave(ourRecorder.getPcmData())">Click To Visualize PCM wave</button> 
-                        <button onclick="ourAudioConverter.pcmToFourComponents(ourRecorder.getPcmData().pointDefinitions)">Click To Visualize component waves</button> 
+                        <button onclick="
+                            getCosines(ourAudioConverter.pcmToFourComponents(ourRecorder.getPcmData().pointDefinitions))
+                        ">Click To Visualize component waves</button> 
                         
                     </div>
                 </article1>

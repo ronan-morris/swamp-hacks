@@ -164,13 +164,22 @@ class GraphRenderer{
         window.requestAnimationFrame(animateFFT());
     }
 
+
 }
+
+
 
 
 animationStarted = false;
 let then = undefined;
 let thenSec = undefined;
-let FFTWaves = undefined;
+var FFTWaves = undefined;
+
+function getCosines(componentWaveArr){
+    console.log(componentWaveArr)
+    FFTWaves = componentWaveArr
+}
+
 function animateFFT() //draws each frame in the animation, is recursively called
 {
     if(!animationStarted)

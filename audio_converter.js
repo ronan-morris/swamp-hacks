@@ -66,13 +66,10 @@ class AudioConverter{
 
             }
         }
-        console.log(magArr);
-        console.log(indexArr);
         let componentWaveArr = [];
         for(let j in indexArr){
             componentWaveArr.push({amplitude:magArr[j], phaseShift:phaseArr[j]});
         }
-        console.log(componentWaveArr)
         return componentWaveArr
 
     }
