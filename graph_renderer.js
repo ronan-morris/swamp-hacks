@@ -73,7 +73,6 @@ class GraphRenderer{
         * draws a line between two points on the object's linked canvas
         * @param    {float}   timeScale      Scales the x-axis in length
         * @param    {float}   maxAmplitude   Height of the y-axis
-        * @param    {float}   rotation       How far the time axis is rotated 'out of the screen' in radians. Default is 0.5
     */
     renderAxes(timeScale = 3, maxAmplitude = 120){
 
