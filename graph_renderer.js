@@ -99,15 +99,28 @@ class GraphRenderer{
         this.drawLine([size,0,size], [size,0,0], rotation, 'red')
         this.drawLine([0,size,size], [0,size,0], rotation, 'red')
     }
-
-    renderWaves(waveArr, zCoordsArr){
-        for(let i = 0; i < waveArr[0].length; i++)
+    /**
+        * draws a line between two points on the object's linked canvas
+        * @param    {Array[Array]}   graphArr     nx2 array of x-values and z-values, x-value listed first
+        * @param    {Array[Array]}   sineWavesArr    mx2 array of amplitudes and frequencies, amplitude listed first, color listed last
+        * @param    {Array}  yCoordsArr           m+1 length array of the backshifts of each of the waves
+    */
+    renderWaves(graphArr, sineWavesArr, yCoordsArr){
+        this.ctx.beginPath();
+        this.ctx.moveTo(150,150);
+        for(let i = 0; i < graphArr.length; i++)
         {
-            
+            let x = waveArr[i][0];
+            let y = yCoordsArr[0];
+            let z = waveArr[i][1];
+            let newCoords = this.rotatexyz([x,y,z], this.XROTATION, this.YROTATION, this.ZROTATION);
+            this.ctx.lineTo(newCoords[0]+150, newCoords[2]+150);
         }
-        for(let i = 1; i < waveArr.length; i++)
+        this.ctx.strokeStyle = "black";
+        this.ctx.stroke();
+        for(let i = 0; i < sineWavesArr.length; i++)
         {
-            
+            this.renderSinWave(sineWavesArr[0], sineWavesArr[1], sinWavesArr[2], yCoordsArr[1+i])
         }
     }
     /**
@@ -120,7 +133,7 @@ class GraphRenderer{
     renderSinWave(amplitude, frequency, color, backshift)
     {
         this.ctx.beginPath();
-        this.ctx.moveTo(150,150)
+        this.ctx.moveTo(150,150);
         for(let i = 0; i < 600; i+= 0.1)
         {
             let x = i;
@@ -131,7 +144,6 @@ class GraphRenderer{
         }
         this.ctx.strokeStyle = color
         this.ctx.stroke();
-        
     }
 
 }
