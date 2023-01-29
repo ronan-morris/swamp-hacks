@@ -68,7 +68,7 @@ class AudioConverter{
         }
         let componentWaveArr = [];
         for(let j in indexArr){
-            componentWaveArr.push({amplitude:magArr[j], phaseShift:phaseArr[j]});
+            componentWaveArr.push({amplitude:magArr[j], phaseShift:phaseArr[j], frequency:indexArr[j]});
         }
         return componentWaveArr
 

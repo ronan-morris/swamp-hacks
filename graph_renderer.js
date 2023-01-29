@@ -176,7 +176,16 @@ let thenSec = undefined;
 var FFTWaves = undefined;
 
 function getCosines(componentWaveArr){
-    console.log(componentWaveArr)
+    console.log(componentWaveArr);
+    /**
+     * is of the form
+     * [
+     * {amplitude:float, phaseShift:float, frequency:int},
+     * {amplitude:float, phaseShift:float, frequency:int},
+     * {amplitude:float, phaseShift:float, frequency:int},
+     * {amplitude:float, phaseShift:float, frequency:int}
+     * ]
+     */
     FFTWaves = componentWaveArr
 }
 
