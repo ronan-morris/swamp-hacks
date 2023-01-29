@@ -114,7 +114,7 @@
                             padding: 20px;
                         }
                     </style>
-                    <li><button><a href="#record">Record Some Audio</button></a></li>
+                    <li><button><a href="#record">Record Audio</button></a></li>
                     <li><button><a href="#visualize">Fourier Transform Visualizer</button></a></li>
                     <li><button><a href="#explain">Fourier Algorithm Explanation</button></a></li>
                     <li><button><a href="#application">Fourier Algorithm Applications</button></a></li>
@@ -123,12 +123,12 @@
                 <article1>
                     <div>
                         <h1 id = "record">Record Some Audio</h1>
-                        <button onclick="ourRecorder.startRecording()">Click To Begin</button> 
-                        <button onclick="ourRecorder.stopRecording()">Click To End</button> 
-                        <button onclick="ourRenderer.renderPulseCodeModulationWave(ourRecorder.getPcmData())">Click To Visualize PCM wave</button> 
+                        <button onclick="ourRecorder.startRecording()">Begin Audio Recording</button> 
+                        <button onclick="ourRecorder.stopRecording()">End Recording</button> 
+                        <button onclick="ourRenderer.renderPulseCodeModulationWave(ourRecorder.getPcmData())">Visualize PCM wave</button> 
                         <button onclick="
                             getCosines(ourAudioConverter.pcmToFourComponents(ourRecorder.getPcmData().pointDefinitions))
-                        ">Click To Visualize component waves</button> 
+                        ">Visualize component waves</button> 
                         
                     </div>
                 </article1>
