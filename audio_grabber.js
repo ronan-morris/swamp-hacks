@@ -1,3 +1,27 @@
+function enableButton(buttonId) {
+    const button = document.getElementById(buttonId);
+    button.classList.remove('disabled');
+    button.disabled = false;
+}
+
+function disableButton(buttonId) {
+    const button = document.getElementById(buttonId);
+    button.classList.add('disabled');
+    button.disabled = true;
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    const recordingButtons = document.querySelectorAll('#visualize button');
+    recordingButtons.forEach(button => {
+        button.classList.add('recording-button');
+    });
+    
+    // Disable all buttons except the start recording button
+    disableButton('stopRecording');
+    disableButton('renderPCM');
+    disableButton('renderEverything');
+});
+
 class AudioRecorder{
     
 
@@ -29,6 +53,11 @@ class AudioRecorder{
             .catch((err) => {
                 console.error(`you got an error: ${err}`);
             });
+
+        // Enable the stop recording button
+        enableButton('stopRecording');
+        // Disable the start recording button
+        disableButton('startRecording');
     }
 
     /**
@@ -49,6 +78,12 @@ class AudioRecorder{
         this.currentRecorder.stop();
         this.currentStream.getTracks()
         .forEach(track => {track.stop();});
+        // Enable the renderPCM button
+        enableButton('renderPCM');
+        // Enable the start recording button
+        enableButton('startRecording');
+        // Disable the stop recording button
+        disableButton('stopRecording');
     }
 
     /**

@@ -14,25 +14,25 @@
 
     <main class="tab-container">
         <div class="tab-buttons">
-            <button class="tab-button" data-tab="record">Record Audio</button>
             <button class="tab-button" data-tab="visualize">Fourier Transform Visualizer</button>
             <button class="tab-button" data-tab="outline">Project Outline</button>
             <button class="tab-button" data-tab="explain">Fourier Algorithm Explanation</button>
             <button class="tab-button" data-tab="application">Fourier Algorithm Applications</button>
         </div>
 
-        <div id="record" class="tab-content">
+        <div id="visualize" class="tab-content">
             <h2>Record Audio</h2>
-            <button onclick="ourRecorder.startRecording()">Begin Audio Recording</button>
-            <button onclick="ourRecorder.stopRecording()">End Recording</button>
-            <button onclick="ourRenderer.renderPulseCodeModulationWave(ourRecorder.getPcmData())">Visualize PCM wave</button>
-            <button onclick="ourRenderer.renderEverything(ourRecorder.getPcmData(), ourAudioConverter.pcmToFourComponents(ourRecorder.getPcmData().pointDefinitions))">Visualize component waves</button>
+            <button id="startRecording" onclick="ourRecorder.startRecording()">Begin Audio Recording</button>
+            <button id="stopRecording" class="disabled" onclick="ourRecorder.stopRecording()" disabled>End Recording</button>
+            <button id="renderPCM" class="disabled" onclick="ourRenderer.renderPulseCodeModulationWave(ourRecorder.getPcmData())" disabled>Visualize PCM wave</button>
+            <button id="renderEverything" class="disabled" onclick="ourRenderer.renderEverything(ourRecorder.getPcmData(), ourAudioConverter.pcmToFourComponents(ourRecorder.getPcmData().pointDefinitions))" disabled>Visualize component waves</button>
+            <div id="visualize">
+                <h2>Fourier Transform Visualizer</h2>
+                <canvas id="visualizer" width="800" height="400"></canvas>
+            </div>
         </div>
 
-        <div id="visualize" class="tab-content">
-            <h2>Fourier Transform Visualizer</h2>
-            <canvas id="visualizer" width="800" height="400"></canvas>
-        </div>
+        
 
         <div id="outline" class="tab-content">
             <h2>Project Outline</h2>
@@ -69,16 +69,20 @@
     </footer>
 
     <script src="graph_renderer.js"></script>
+    <script>
+        ourRenderer = new GraphRenderer(document, "visualizer")
+        ourRenderer.renderAxes()
+    </script>
     <script src="audio_grabber.js"></script>
+    <script>
+        ourRecorder = new AudioRecorder()
+    </script>
     <script src="https://cdn.jsdelivr.net/npm/fourier/fourier.min.js"></script>
     <script src="audio_converter.js"></script>
     <script>
-        const ourRenderer = new GraphRenderer(document, "visualizer");
-        ourRenderer.renderAxes();
-
-        const ourRecorder = new AudioRecorder();
-        const ourAudioConverter = new AudioConverter();
-
+        ourAudioConverter = new AudioConverter()
+    </script>
+    <script>
         // Tab functionality
         const tabButtons = document.querySelectorAll('.tab-button');
         const tabContents = document.querySelectorAll('.tab-content');

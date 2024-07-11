@@ -178,6 +178,7 @@ class GraphRenderer{
         }
         this.ctx.strokeStyle = color
         this.ctx.stroke();
+        enableButton('renderEverything');
     }
     
     renderEverything(pcmObj, componentWaveArr, color = 'black', backshift = 0) {
